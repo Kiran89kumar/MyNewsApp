@@ -1,15 +1,22 @@
 apply plugin: 'com.android.application'
+apply plugin: 'com.neenbedankt.android-apt'
 
 android {
-    compileSdkVersion 26
-    buildToolsVersion "26.0.0"
+
+    def globals = rootProject.extensions.getByName("ext")
+    compileSdkVersion globals.getAt("androidCompileSdkVersion")
+    buildToolsVersion globals.getAt("androidBuildToolsVersion")
+    def verName = globals.getAt("androidVersionName")
+
     defaultConfig {
-        applicationId "com.kirankumar.mynewsapp"
-        minSdkVersion 15
-        targetSdkVersion 26
+        resConfigs "en"
+        vectorDrawables.useSupportLibrary = true
+        applicationId globals.getAt("androidApplicationId")
+        minSdkVersion globals.getAt("androidMinSdkVersion")
+        targetSdkVersion globals.getAt("androidTargetSdkVersion")
         versionCode 1
-        versionName "1.0"
-        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+        versionName verName
+        testInstrumentationRunner "com.kirankumar.android.news.test.util.MockTestRunner"
     }
     buildTypes {
         release {
@@ -20,11 +27,19 @@ android {
 }
 
 dependencies {
+    def libs = rootProject.ext.libs
+    provided libs.javaxAnnotation
+    apt libs.daggerCompiler
+    compile libs.appcompatv7
+    compile libs.constraintLayout
+
+    compile libs.dagger
+    compile libs.retrofit
+    compile libs.gsonConverter
+
     compile fileTree(dir: 'libs', include: ['*.jar'])
     androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {
         exclude group: 'com.android.support', module: 'support-annotations'
     })
-    compile 'com.android.support:appcompat-v7:26.+'
-    compile 'com.android.support.constraint:constraint-layout:1.0.2'
     testCompile 'junit:junit:4.12'
 }
