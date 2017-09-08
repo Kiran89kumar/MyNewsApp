@@ -30,8 +30,24 @@ dependencies {
     def libs = rootProject.ext.libs
     provided libs.javaxAnnotation
     apt libs.daggerCompiler
+
+    compile libs.supportv13
+    compile libs.supportv4
     compile libs.appcompatv7
+    compile libs.recyclerView
     compile libs.constraintLayout
+    compile(libs.design) {
+        exclude group: 'com.android.support', module: 'recyclerview-v7'
+    }
+
+    compile libs.rxJava
+    compile (libs.rxAndroid) {
+        exclude group: 'io.reactivex', module: 'rxjava'
+    }
+    compile(libs.retrofitRxJavaAdapter) {
+        exclude group: 'io.reactivex', module: 'rxjava'
+        exclude group: 'com.squareup.retrofit2', module: 'retrofit'
+    }
 
     compile libs.dagger
     compile libs.retrofit
@@ -41,5 +57,6 @@ dependencies {
     androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {
         exclude group: 'com.android.support', module: 'support-annotations'
     })
+
     testCompile 'junit:junit:4.12'
 }
