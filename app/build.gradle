@@ -52,6 +52,8 @@ dependencies {
     compile libs.dagger
     compile libs.retrofit
     compile libs.gsonConverter
+    compile libs.picasso
+    compile libs.picassoOkHttp3
 
     compile fileTree(dir: 'libs', include: ['*.jar'])
     androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {

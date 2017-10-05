@@ -10,6 +10,7 @@ import android.widget.TextView;
 import com.kirankumar.mynewsapp.R;
 import com.kirankumar.mynewsapp.domain.Articles;
 import com.kirankumar.mynewsapp.domain.NewsData;
+import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -21,6 +22,13 @@ import java.util.List;
 
 public class NewsListAdapter extends RecyclerView.Adapter<NewsListAdapter.ViewHolder>{
 
+    private Picasso picasso;
+
+    public NewsListAdapter(Picasso picasso){
+
+        this.picasso = picasso;
+    }
+
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_news, parent, false);
@@ -29,6 +37,7 @@ public class NewsListAdapter extends RecyclerView.Adapter<NewsListAdapter.ViewHo
 
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
+        picasso.load(articles.get(position).getUrlToImage()).into(holder.thumbnail);
         holder.storyType.setText(articles.get(position).getAuthor());
         holder.headline.setText(articles.get(position).getTitle());
         holder.detail.setText(articles.get(position).getDescription());

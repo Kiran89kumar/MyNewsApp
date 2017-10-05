@@ -30,14 +30,12 @@ public class NetworkModule {
     @Provides
     @Singleton
     OkHttpClient providesOkHttpClient(Context context, Interceptor networkInterceptor,
-                                      @Named("LOGGING") Interceptor loggingInterceptor,
-                                      HeaderInterceptor headerInterceptor){
+                                      @Named("LOGGING") Interceptor loggingInterceptor){
         return buildOkHttpClient(context,
                 Cache.GENERAL,
                 50,
                 networkInterceptor,
-                loggingInterceptor,
-                headerInterceptor);
+                loggingInterceptor);
     }
 
 
@@ -45,15 +43,13 @@ public class NetworkModule {
                                            String cacheName,
                                            int cacheSize,
                                            @Nullable Interceptor networkInterceptor,
-                                           @Nullable Interceptor loggingInterceptor,
-                                           @Nullable Interceptor headerInterceptor) {
+                                           @Nullable Interceptor loggingInterceptor) {
         HttpClientBuilder builder =
                 new HttpClientBuilder(context)
                         .setTimeouts(30)
                         .setCache(cacheName, cacheSize)
                         .setNetworkInterceptor(networkInterceptor)
                         .setLoggingInterceptor(loggingInterceptor)
-                        .setWireFormatHeaderInterceptor(headerInterceptor)
                         .enableSocketLog(true);
 
         return builder.build();

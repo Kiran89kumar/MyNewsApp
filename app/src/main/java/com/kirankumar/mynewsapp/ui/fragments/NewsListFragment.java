@@ -3,23 +3,25 @@ package com.kirankumar.mynewsapp.ui.fragments;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
+import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 
 import com.kirankumar.mynewsapp.R;
 import com.kirankumar.mynewsapp.data.api.NewsApi;
+import com.kirankumar.mynewsapp.di.components.NewsActivityComponent;
 import com.kirankumar.mynewsapp.domain.NewsData;
 import com.kirankumar.mynewsapp.ui.adapters.list.NewsListAdapter;
+import com.squareup.picasso.Picasso;
+
+import javax.inject.Inject;
 
 import retrofit2.Response;
-import retrofit2.Retrofit;
-import retrofit2.adapter.rxjava.RxJavaCallAdapterFactory;
-import retrofit2.converter.gson.GsonConverterFactory;
 import rx.Observable;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.functions.Action1;
@@ -31,7 +33,7 @@ import static com.kirankumar.mynewsapp.util.Constant.APIKEY;
  * Created by kiran.kumar on 9/8/17.
  */
 
-public class NewsListFragment extends Fragment {
+public class NewsListFragment extends BaseFragment {
     public NewsListFragment() {
         // Required empty public constructor
     }
@@ -62,13 +64,20 @@ public class NewsListFragment extends Fragment {
         recyclerView.setHasFixedSize(true);
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getContext());
         recyclerView.setLayoutManager(layoutManager);
+        DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(recyclerView.getContext(), LinearLayout.VERTICAL);
+        recyclerView.addItemDecoration(dividerItemDecoration);
+    }
+
+    @Override
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+        getComponent(NewsActivityComponent.class).inject(this);
+        adapter = new NewsListAdapter(picasso);
     }
 
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-        adapter = new NewsListAdapter();
-        makeApiCall();
     }
 
     @Override
@@ -86,13 +95,6 @@ public class NewsListFragment extends Fragment {
     }
 
     private void makeApiCall(){
-        Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl("http://beta.newsapi.org/")
-                .addConverterFactory(GsonConverterFactory.create())
-                .addCallAdapterFactory(RxJavaCallAdapterFactory.create())
-                .build();
-
-        NewsApi newsApi = retrofit.create(NewsApi.class);
 
         Observable<Response<NewsData>> newsListObservable = newsApi.getBBCNews("bbc-news",APIKEY);
 
@@ -107,6 +109,11 @@ public class NewsListFragment extends Fragment {
                 });
     }
 
+    @Inject
+    Picasso picasso;
+
+    @Inject
+    NewsApi newsApi;
 
     private RecyclerView recyclerView;
     private NewsListAdapter adapter;

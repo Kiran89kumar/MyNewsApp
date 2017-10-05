@@ -29,6 +29,10 @@ public class KnronosApp extends Application {
         return applicationModule;
     }
 
+    public ApplicationComponent getAppComponent() {
+        return appComponent;
+    }
+
     private ApplicationComponent appComponent;
     private ApplicationModule applicationModule;
     private static final String TAG = "KnronosApp";
