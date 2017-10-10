@@ -5,6 +5,7 @@ import android.content.Context;
 import android.graphics.Bitmap;
 
 import com.jakewharton.picasso.OkHttp3Downloader;
+import com.kirankumar.mynewsapp.di.PerActivity;
 import com.squareup.picasso.Picasso;
 
 import javax.inject.Singleton;
@@ -17,11 +18,11 @@ import okhttp3.OkHttpClient;
  * Created by kiran.kumar on 10/5/17.
  */
 
-@Module(includes = NetworkModule.class)
+@Module
 public class ImageModule {
 
     @Provides
-    @Singleton
+    @PerActivity
     static Picasso provideDefaultPicasso(Context context,
                                          OkHttpClient client) {
         return buildPicasso(context, client, null);
